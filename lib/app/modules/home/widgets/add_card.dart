@@ -78,7 +78,7 @@ class AddCard extends StatelessWidget {
                                   .color!
                                   .toHex();
                               var task = Task(
-                                  title: homeCtrl.editCtrl.toString(),
+                                  title: homeCtrl.editCtrl.text,
                                   icon: icon,
                                   color: color);
                               Get.back();
