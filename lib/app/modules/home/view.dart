@@ -6,6 +6,7 @@ import 'package:mygoals/app/data/models/task.dart';
 import 'package:mygoals/app/modules/home/controller.dart';
 import 'package:mygoals/app/core/utils/extention.dart';
 import 'package:mygoals/app/modules/home/widgets/add_card.dart';
+import 'package:mygoals/app/modules/home/widgets/add_dialog.dart';
 import 'package:mygoals/app/modules/home/widgets/task_card.dart';
 
 class HomePage extends GetView<HomeController> {
@@ -55,7 +56,13 @@ class HomePage extends GetView<HomeController> {
         builder: (_,__,___){
           return Obx(
                 () => FloatingActionButton(
-              onPressed: () {},
+              onPressed: (){
+                if(controller.tasks.isNotEmpty){
+                  Get.to(() => AddDialog(), transition: Transition.downToUp,);
+                }else{
+                  EasyLoading.showInfo("Please create your task type");
+                }
+              },
               backgroundColor: controller.deleting.value ? Colors.red : blue,
               child: Icon(controller.deleting.value ? Icons.delete : Icons.add),
             ),

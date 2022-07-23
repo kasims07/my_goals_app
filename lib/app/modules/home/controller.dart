@@ -1,3 +1,5 @@
+import 'dart:ffi';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
@@ -6,14 +8,16 @@ import 'package:mygoals/app/data/services/storage/repository.dart';
 import '../../data/models/task.dart';
 
 class HomeController extends GetxController {
+  HomeController({required this.taskRepository});
   TaskRepository taskRepository;
   final formKey = GlobalKey<FormState>();
   final editCtrl = TextEditingController();
   final chipIndex = 0.obs;
   final deleting = false.obs;
-  HomeController({required this.taskRepository});
-
   final tasks = <Task>[].obs;
+  final task = Rx<Task?>(null);
+  final doingTodos = <dynamic>[].obs;
+  final doneTodos = <dynamic>[].obs;
 
   @override
   void onInit() {
@@ -46,6 +50,43 @@ class HomeController extends GetxController {
 
   void deleteTask(Task task) {
     tasks.remove(task);
+  }
+
+  void changeTask(Task? select){
+    task.value = select;
+  }
+
+  void changeTodo(List<dynamic> select){
+    doingTodos.clear();
+    doneTodos.clear();
+    for(int i = 0; i < select.length; i++){
+      var todo = select[i];
+      var status = todo['done'];
+      if(status ==  true){
+        doneTodos.add(todo);
+      }else{
+        doingTodos.add(todo);
+      }
+
+    }
+  }
+
+  updateTask(Task task, String title) {
+    var todos = task.todos ?? [];
+    if(containeTodo(todos, title)){
+      return false;
+    }
+    var todo = {'title': title, 'done': false};
+    todos.add(todo);
+    var newTask = task.copyWith(todos: todos);
+    int oldIdx = tasks.indexOf(task);
+    tasks[oldIdx] = newTask;
+    tasks.refresh();
+    return true;
+  }
+
+  bool containeTodo(List todos, String title) {
+    return todos.any((element) => element['title'] == title);
   }
 
 }
