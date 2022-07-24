@@ -42,9 +42,11 @@ class DoingList extends StatelessWidget {
                 ),
 
               ),
-              Padding(
-                padding: EdgeInsets.symmetric(horizontal: 4.0.wp),
-                child: Text(element['title'], overflow: TextOverflow.ellipsis,),
+              Expanded(
+                child: Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 4.0.wp),
+                  child: Text(element['title'], overflow: TextOverflow.fade,),
+                ),
               )
             ],
           ),
